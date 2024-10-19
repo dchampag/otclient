@@ -146,6 +146,7 @@ function init()
   g_keyboard.bindKeyDown('Ctrl+H', openHelp)
 
   consoleToggleChat = consolePanel:getChildById('toggleChat')
+  consoleToggleChat:setChecked(true)
   load()
 
   if g_game.isOnline() then
@@ -191,6 +192,10 @@ function enableChat()
   g_keyboard.unbindKeyUp("Space")
   g_keyboard.unbindKeyUp("Enter")
   g_keyboard.unbindKeyUp("Escape")
+  if consoleToggleChat:isChecked() then
+    g_keyboard.bindKeyUp("Enter", disableChat)
+    g_keyboard.bindKeyUp("Escape", disableChat)
+  end
 
   gameInterface.unbindWalkKey("W")
   gameInterface.unbindWalkKey("D")
@@ -212,9 +217,6 @@ function disableChat()
   consoleTextEdit:setText("")
 
   local quickFunc = function()
-    if consoleToggleChat:isChecked() then
-      consoleToggleChat:setChecked(false)
-    end
     enableChat()
   end
   g_keyboard.bindKeyUp("Space", quickFunc)
